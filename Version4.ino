@@ -6,8 +6,8 @@
 #include <ArduinoJson.h>
 
 // Wi-Fi credentials
-const char* ssid = "Asish Maharana";
-const char* password = "asish2003@@";
+const char* ssid = "SSID";
+const char* password = "Password";
 
 // Ollama API settings
 const char* server = "192.168.118.114";  // Replace with your PC's IP address
@@ -15,6 +15,8 @@ const int port = 11434;
 const char* endpoint = "/api/chat";
 const char* model = "llama3.2";
 const bool stream = false;
+
+static lv_style_t style_cursor;
 
 // Global state
 String previousAssistantContent = "";
@@ -27,6 +29,7 @@ Arduino_GigaDisplayTouch touch;
 lv_obj_t* textarea;
 lv_obj_t* keyboard;
 lv_obj_t* output_area;
+
 
 String sendChatRequest(String userMessage) {
   DynamicJsonDocument doc(8192);
@@ -159,7 +162,11 @@ void setup() {
   lv_obj_set_style_border_color(textarea, lv_color_hex(0xA9A9A9), LV_PART_MAIN);
   lv_obj_set_style_border_width(textarea, 2, LV_PART_MAIN);
   lv_obj_set_style_text_color(textarea, lv_color_white(), LV_PART_MAIN);
-  lv_obj_set_style_text_color(textarea, lv_color_white(), LV_PART_CURSOR); // white cursor
+  
+  lv_style_init(&style_cursor);
+  lv_style_set_bg_color(&style_cursor, lv_color_white());
+  lv_style_set_bg_opa(&style_cursor, LV_OPA_COVER);
+  lv_obj_add_style(textarea, &style_cursor, LV_PART_CURSOR | LV_STATE_FOCUSED);
 
   // Output area
   output_area = lv_textarea_create(scr);
